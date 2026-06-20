@@ -329,7 +329,7 @@ export default function ProductUploadForm({
       </div>
 
       {/* Sticky action bar */}
-      <div className="fixed inset-x-0 bottom-0 z-20 border-t border-admin-border bg-admin-bg/90 p-4 backdrop-blur-md lg:pl-64">
+      <div className="pb-safe-bar fixed inset-x-0 bottom-0 z-20 border-t border-admin-border bg-admin-bg/90 px-4 pt-4 backdrop-blur-md lg:pl-64">
         <div className="mx-auto flex max-w-vercel items-center justify-end gap-3">
           <Button
             type="button"

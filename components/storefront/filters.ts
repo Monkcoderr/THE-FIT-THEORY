@@ -16,6 +16,7 @@ export const FILTER_GROUPS = [
       'Compression',
       'Caps',
       'Vest',
+      'Jackets',
       'Others',
     ],
   },

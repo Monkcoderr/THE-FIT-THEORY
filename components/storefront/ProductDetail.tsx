@@ -105,7 +105,7 @@ export default function ProductDetail({ product }: ProductDetailProps) {
       </div>
 
       {/* Sticky mobile WhatsApp bar */}
-      <div className="fixed inset-x-0 bottom-0 z-30 border-t border-nike-hairline-soft bg-white/95 p-4 backdrop-blur lg:hidden">
+      <div className="pb-safe-bar fixed inset-x-0 bottom-0 z-30 border-t border-nike-hairline-soft bg-white/95 px-4 pt-4 backdrop-blur lg:hidden">
         <div className="mx-auto flex max-w-nike items-center gap-3">
           <div className="shrink-0">
             <p className="text-xs text-nike-mute">Price</p>

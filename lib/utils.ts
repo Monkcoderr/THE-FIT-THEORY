@@ -128,6 +128,7 @@ export const CATEGORIES: Category[] = [
   'Compression',
   'Caps',
   'Vest',
+  'Jackets',
   'Others',
 ];
 

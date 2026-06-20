@@ -45,10 +45,10 @@ export default async function ProductPage({ params }: PageProps) {
       <Navbar />
       <main className="mx-auto max-w-nike px-4 pb-28 pt-20 sm:px-6 lg:pb-20">
         <Link
-          href="/shop"
+          href="/"
           className="mb-6 inline-flex items-center gap-1 text-sm text-nike-mute transition-colors hover:text-nike-ink"
         >
-          <ChevronLeft className="h-4 w-4" /> Back to shop
+          <ChevronLeft className="h-4 w-4" /> Back to home
         </Link>
 
         <ProductDetail product={product} />

@@ -1,17 +1,86 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, Suspense } from 'react';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useSearchParams } from 'next/navigation';
 import { Menu, X, Search } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 const LINKS = [
   { href: '/shop', label: 'Shop All' },
-  { href: '/shop?sport=Football', label: 'Football' },
-  { href: '/shop?sport=Gym%2FLifting', label: 'Gym' },
+  { href: '/shop?category=Trousers', label: 'Trousers' },
+  { href: '/shop?category=T-Shirt', label: 'T-Shirts' },
   { href: '/shop?category=Jersey', label: 'Jerseys' },
+  { href: '/shop?category=Polo', label: 'Polo T-Shirts' },
+  { href: '/shop?category=Caps', label: 'Caps' },
+  { href: '/shop?category=Shorts', label: 'Shorts' },
+  { href: '/shop?category=Jackets', label: 'Jackets' },
+  { href: '/shop?category=Others', label: 'Other Essentials' },
 ];
+
+function NavbarLinks({ solid }: { solid: boolean }) {
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+
+  return (
+    <div className="hidden items-center gap-2 overflow-x-auto no-scrollbar md:flex max-w-[65%] py-1">
+      {LINKS.map((l) => {
+        const isTabActive =
+          l.href === '/shop'
+            ? pathname === '/shop' && !searchParams?.get('category')
+            : pathname === '/shop' &&
+              searchParams?.get('category') === l.href.split('category=')[1];
+        return (
+          <Link
+            key={l.label}
+            href={l.href}
+            className={cn(
+              'shrink-0 rounded-full px-3.5 py-1.5 text-xs font-semibold uppercase tracking-wider transition-all',
+              isTabActive
+                ? solid
+                  ? 'bg-nike-ink text-white'
+                  : 'bg-white text-nike-ink'
+                : solid
+                  ? 'bg-nike-cloud text-nike-charcoal hover:bg-nike-hairline-soft hover:text-nike-ink'
+                  : 'bg-white/10 text-white hover:bg-white/20'
+            )}
+          >
+            {l.label}
+          </Link>
+        );
+      })}
+    </div>
+  );
+}
+
+function MobileNavbarLinks() {
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+
+  return (
+    <div className="flex flex-col px-4 py-2 max-h-[80vh] overflow-y-auto">
+      {LINKS.map((l) => {
+        const isTabActive =
+          l.href === '/shop'
+            ? pathname === '/shop' && !searchParams?.get('category')
+            : pathname === '/shop' &&
+              searchParams?.get('category') === l.href.split('category=')[1];
+        return (
+          <Link
+            key={l.label}
+            href={l.href}
+            className={cn(
+              'border-b border-nike-hairline-soft py-4 text-base font-medium transition-colors last:border-0',
+              isTabActive ? 'text-nike-ink font-bold' : 'text-nike-mute'
+            )}
+          >
+            {l.label}
+          </Link>
+        );
+      })}
+    </div>
+  );
+}
 
 export default function Navbar() {
   const pathname = usePathname();
@@ -36,10 +105,8 @@ export default function Navbar() {
   return (
     <header
       className={cn(
-        'fixed inset-x-0 top-0 z-40 transition-colors duration-300',
-        solid
-          ? 'border-b border-nike-hairline-soft bg-white'
-          : 'bg-transparent'
+        'safe-top fixed inset-x-0 top-0 z-40 transition-colors duration-300',
+        solid ? 'border-b border-nike-hairline-soft bg-white' : 'bg-transparent'
       )}
     >
       <nav className="mx-auto flex h-14 max-w-nike items-center justify-between px-4 sm:px-6">
@@ -53,11 +120,7 @@ export default function Navbar() {
             )}
             aria-label="Toggle menu"
           >
-            {mobileOpen ? (
-              <X className="h-5 w-5" />
-            ) : (
-              <Menu className="h-5 w-5" />
-            )}
+            {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
           </button>
           <Link
             href="/"
@@ -71,20 +134,9 @@ export default function Navbar() {
         </div>
 
         {/* Center: desktop links */}
-        <div className="hidden items-center gap-8 md:flex">
-          {LINKS.map((l) => (
-            <Link
-              key={l.label}
-              href={l.href}
-              className={cn(
-                'text-sm font-medium transition-opacity hover:opacity-60',
-                solid ? 'text-nike-ink' : 'text-white'
-              )}
-            >
-              {l.label}
-            </Link>
-          ))}
-        </div>
+        <Suspense fallback={<div className="hidden md:flex min-w-[300px]" />}>
+          <NavbarLinks solid={solid} />
+        </Suspense>
 
         {/* Right: search */}
         <Link
@@ -92,9 +144,7 @@ export default function Navbar() {
           aria-label="Search products"
           className={cn(
             'flex h-10 w-10 items-center justify-center rounded-full transition-colors',
-            solid
-              ? 'text-nike-ink hover:bg-nike-cloud'
-              : 'text-white hover:bg-white/10'
+            solid ? 'text-nike-ink hover:bg-nike-cloud' : 'text-white hover:bg-white/10'
           )}
         >
           <Search className="h-5 w-5" />
@@ -104,17 +154,9 @@ export default function Navbar() {
       {/* Mobile drawer */}
       {mobileOpen && (
         <div className="border-t border-nike-hairline-soft bg-white md:hidden">
-          <div className="flex flex-col px-4 py-2">
-            {LINKS.map((l) => (
-              <Link
-                key={l.label}
-                href={l.href}
-                className="border-b border-nike-hairline-soft py-4 text-base font-medium text-nike-ink last:border-0"
-              >
-                {l.label}
-              </Link>
-            ))}
-          </div>
+          <Suspense fallback={<div className="h-40" />}>
+            <MobileNavbarLinks />
+          </Suspense>
         </div>
       )}
     </header>

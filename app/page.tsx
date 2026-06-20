@@ -1,10 +1,11 @@
 import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
-import { getFeaturedProducts } from '@/lib/data';
+import { getFeaturedProducts, getProducts } from '@/lib/data';
 import Navbar from '@/components/storefront/Navbar';
 import Footer from '@/components/storefront/Footer';
 import HeroSection from '@/components/storefront/HeroSection';
 import ProductGrid from '@/components/storefront/ProductGrid';
+import CategoryShowcase from '@/components/storefront/CategoryShowcase';
 
 export const dynamic = 'force-dynamic';
 
@@ -16,13 +17,19 @@ const CATEGORIES = [
 ];
 
 export default async function HomePage() {
-  const featured = await getFeaturedProducts(8);
+  const [featured, allProducts] = await Promise.all([
+    getFeaturedProducts(8),
+    getProducts(),
+  ]);
 
   return (
     <>
       <Navbar />
       <main>
         <HeroSection />
+
+        {/* Browse all categories without leaving the homepage */}
+        <CategoryShowcase products={allProducts} />
 
         {/* Featured */}
         <section className="mx-auto max-w-nike px-4 py-16 sm:px-6">

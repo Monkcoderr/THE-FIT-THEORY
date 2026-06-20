@@ -11,6 +11,7 @@ export type Category =
   | 'Compression'
   | 'Caps'
   | 'Vest'
+  | 'Jackets'
   | 'Others';
 
 export type Fabric =

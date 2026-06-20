@@ -1,8 +1,6 @@
-import Link from 'next/link';
-
 export default function HeroSection() {
   return (
-    <section className="relative flex min-h-[100svh] items-end overflow-hidden bg-nike-ink">
+    <section className="relative flex min-h-[280px] sm:min-h-[300px] lg:min-h-[30vh] items-center overflow-hidden bg-nike-ink">
       {/* Atmospheric backdrop (CSS — no external image dependency) */}
       <div
         className="absolute inset-0"
@@ -20,32 +18,26 @@ export default function HeroSection() {
       />
 
       {/* Content */}
-      <div className="relative z-10 mx-auto w-full max-w-nike px-4 pb-16 pt-28 sm:px-6 sm:pb-24">
-        <p className="mb-3 text-sm font-medium uppercase tracking-widest text-white/70">
-          New Season · Built for Performance
-        </p>
-        <h1 className="max-w-3xl text-5xl font-extrabold uppercase leading-[0.9] tracking-tight text-white sm:text-7xl lg:text-8xl">
-          Engineered
-          <br />
-          to Move.
-        </h1>
-        <p className="mt-5 max-w-md text-base text-white/80 sm:text-lg">
-          Dry-fit jerseys, compression gear, and training essentials. Designed
-          for athletes who refuse to slow down.
-        </p>
-        <div className="mt-8 flex flex-wrap gap-3">
-          <Link
-            href="/shop"
-            className="inline-flex h-12 items-center justify-center rounded-full bg-white px-8 text-base font-medium text-nike-ink transition-transform hover:scale-[1.02] active:scale-[0.98]"
-          >
-            Shop the Collection
-          </Link>
-          <Link
-            href="/shop?sport=Football"
-            className="inline-flex h-12 items-center justify-center rounded-full border border-white/40 px-8 text-base font-medium text-white transition-colors hover:bg-white/10"
-          >
-            Football Range
-          </Link>
+      <div className="relative z-10 mx-auto w-full max-w-nike px-4 pt-20 pb-8 sm:px-6 sm:pt-24 sm:pb-12 lg:py-10">
+        <div className="grid gap-6 md:grid-cols-12 md:items-center">
+          {/* Left Column: Heading */}
+          <div className="md:col-span-7">
+            <p className="mb-2 text-[10px] sm:text-xs font-bold uppercase tracking-widest text-white/70">
+              New Season · Built for Performance
+            </p>
+            <h1 className="text-3xl font-extrabold uppercase leading-none tracking-tight text-white sm:text-5xl lg:text-6xl">
+              Engineered
+              <br className="hidden sm:inline" /> to Move.
+            </h1>
+          </div>
+
+          {/* Right Column: Description */}
+          <div className="md:col-span-5 flex flex-col justify-center">
+            <p className="text-xs sm:text-sm text-white/80 leading-relaxed max-w-md">
+              Dry-fit jerseys, compression gear, and training essentials. Designed
+              for athletes who refuse to slow down.
+            </p>
+          </div>
         </div>
       </div>
     </section>

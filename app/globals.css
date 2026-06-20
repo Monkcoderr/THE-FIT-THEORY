@@ -34,6 +34,32 @@ body {
   font-family: var(--font-inter), system-ui, -apple-system, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  /* Prevent rubber-band scroll chaining inside the installed PWA. */
+  overscroll-behavior-y: none;
+}
+
+/* Prevent iOS Safari from auto-zooming when focusing a sub-16px input.
+   Applies only on small screens so desktop sizing is untouched. */
+@media (max-width: 640px) {
+  input,
+  select,
+  textarea {
+    font-size: 16px;
+  }
+}
+
+/* ─── Safe-area (notch / home indicator) helpers ───
+   Used by fixed/sticky bars so they clear the iOS notch and home bar
+   when the app runs standalone with viewport-fit=cover. */
+.safe-top {
+  padding-top: env(safe-area-inset-top);
+}
+.safe-bottom {
+  padding-bottom: env(safe-area-inset-bottom);
+}
+/* Fixed bottom action bars: keep their 1rem padding + add the home-indicator inset. */
+.pb-safe-bar {
+  padding-bottom: calc(1rem + env(safe-area-inset-bottom));
 }
 
 /* Selection (Vercel signature) */

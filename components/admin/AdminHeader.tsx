@@ -18,7 +18,7 @@ export default function AdminHeader() {
   const current = TITLES.find((t) => t.match(pathname))?.title ?? 'Admin';
 
   return (
-    <header className="sticky top-0 z-30 flex h-16 items-center justify-between gap-3 border-b border-admin-border bg-admin-bg/80 px-4 backdrop-blur-md lg:px-8">
+    <header className="safe-top sticky top-0 z-30 flex h-16 items-center justify-between gap-3 border-b border-admin-border bg-admin-bg/80 px-4 backdrop-blur-md lg:px-8">
       <div className="flex items-center gap-3">
         <button
           onClick={toggle}

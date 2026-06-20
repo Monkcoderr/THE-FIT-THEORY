@@ -20,6 +20,7 @@ export interface IProduct extends Document {
     | 'Compression'
     | 'Caps'
     | 'Vest'
+    | 'Jackets'
     | 'Others';
   fabric:
     | 'Dry-Fit'
@@ -81,6 +82,7 @@ const ProductSchema = new Schema<IProduct>(
         'Compression',
         'Caps',
         'Vest',
+        'Jackets',
         'Others',
       ],
       required: true,

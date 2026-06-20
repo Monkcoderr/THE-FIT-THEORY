@@ -1,6 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
+  outputFileTracing: false,
   images: {
     remotePatterns: [
       {
@@ -12,6 +13,23 @@ const nextConfig = {
   },
   experimental: {
     serverComponentsExternalPackages: ['mongoose'],
+  },
+  async headers() {
+    return [
+      {
+        // Never let the browser serve a stale service worker — always
+        // revalidate so PWA updates propagate immediately on deploy.
+        source: '/sw.js',
+        headers: [
+          { key: 'Cache-Control', value: 'no-cache, no-store, must-revalidate' },
+          { key: 'Service-Worker-Allowed', value: '/' },
+        ],
+      },
+      {
+        source: '/offline.html',
+        headers: [{ key: 'Cache-Control', value: 'no-cache' }],
+      },
+    ];
   },
   webpack: (config, { dev }) => {
     // In development, use an in-memory webpack cache instead of the

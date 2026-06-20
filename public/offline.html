@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#111111" />
+    <title>Offline — The Fit Theory</title>
+    <style>
+      * { box-sizing: border-box; margin: 0; padding: 0; }
+      html, body { height: 100%; }
+      body {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 100dvh;
+        padding: env(safe-area-inset-top) 24px env(safe-area-inset-bottom);
+        background: radial-gradient(120% 80% at 70% 20%, #2b2b2e 0%, #111111 55%, #050505 100%);
+        color: #fff;
+        font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+        text-align: center;
+      }
+      .wrap { max-width: 360px; }
+      .mark {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 72px; height: 72px;
+        border-radius: 18px;
+        background: #050505;
+        font-weight: 800; font-size: 28px; letter-spacing: -1px;
+        margin-bottom: 24px;
+      }
+      .dot { color: #1151ff; }
+      h1 { font-size: 22px; font-weight: 800; text-transform: uppercase; letter-spacing: -0.5px; }
+      p { margin-top: 12px; color: rgba(255,255,255,0.7); font-size: 14px; line-height: 1.6; }
+      button {
+        margin-top: 28px;
+        min-height: 48px;
+        padding: 0 28px;
+        border: 0; border-radius: 999px;
+        background: #fff; color: #111;
+        font-size: 15px; font-weight: 600;
+        cursor: pointer;
+      }
+      button:active { transform: scale(0.98); }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <div class="mark">FT<span class="dot">.</span></div>
+      <h1>You're Offline</h1>
+      <p>
+        We couldn't reach the network. Check your connection and try again —
+        previously viewed pages may still be available.
+      </p>
+      <button onclick="location.reload()">Retry</button>
+    </div>
+  </body>
+</html>
