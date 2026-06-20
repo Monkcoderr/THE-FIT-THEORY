@@ -26,4 +26,6 @@ export const ALLOWED_MIME_TYPES = [
   'image/webp',
 ];
 
-export const MAX_UPLOAD_BYTES = 5 * 1024 * 1024; // 5MB
+// Kept under Vercel's ~4.5MB serverless function request body limit so
+// large uploads fail with a clear message instead of a platform-level 413.
+export const MAX_UPLOAD_BYTES = 4 * 1024 * 1024; // 4MB

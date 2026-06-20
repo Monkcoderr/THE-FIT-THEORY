@@ -6,6 +6,10 @@ import { UploadCloud, X, Camera, Loader2, GripVertical } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { toast } from '@/components/ui/Toast';
 
+// Keep in sync with MAX_UPLOAD_BYTES in lib/cloudinary.ts.
+// Kept under Vercel's ~4.5MB serverless request body limit.
+const MAX_UPLOAD_BYTES = 4 * 1024 * 1024; // 4MB
+
 interface ImageUploaderProps {
   value: string[];
   onChange: (urls: string[]) => void;
@@ -36,6 +40,17 @@ export default function ImageUploader({
 
       const uploaded: string[] = [];
       for (const file of toUpload) {
+        // Guard client-side against the platform body limit (Vercel rejects
+        // request bodies > ~4.5MB before the API route runs).
+        if (file.size > MAX_UPLOAD_BYTES) {
+          toast.error(
+            `"${file.name}" is too large (max ${Math.round(
+              MAX_UPLOAD_BYTES / (1024 * 1024)
+            )}MB).`
+          );
+          continue;
+        }
+
         const fd = new FormData();
         fd.append('file', file);
         try {
@@ -44,13 +59,27 @@ export default function ImageUploader({
             method: 'POST',
             body: fd,
           });
+
+          // The platform may reject oversized/blocked requests with a
+          // non-JSON body (e.g. a 413). Parse defensively so we never
+          // surface a misleading "check your connection" message.
           // eslint-disable-next-line no-await-in-loop
-          const data = await res.json();
+          const data = await res.json().catch(() => null);
+
           if (!res.ok) {
-            const msg = data.detail
-              ? `${data.error ?? 'Upload failed'} (${data.detail})`
-              : data.error ?? 'Upload failed';
-            toast.error(msg);
+            if (res.status === 413) {
+              toast.error(
+                `"${file.name}" is too large for the server (max ~4MB).`
+              );
+            } else {
+              const base = data?.error ?? `Upload failed (HTTP ${res.status})`;
+              toast.error(data?.detail ? `${base} (${data.detail})` : base);
+            }
+            continue;
+          }
+
+          if (!data?.url) {
+            toast.error('Upload failed: unexpected server response.');
             continue;
           }
           uploaded.push(data.url);
@@ -132,7 +161,7 @@ export default function ImageUploader({
           </button>
         </div>
         <p className="mt-2 text-xs text-admin-mute">
-          JPG, PNG, WebP · up to 5MB · {value.length}/{maxImages}
+          JPG, PNG, WebP · up to 4MB · {value.length}/{maxImages}
         </p>
         <input
           ref={inputRef}
