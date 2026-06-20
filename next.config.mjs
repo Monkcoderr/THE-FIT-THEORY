@@ -1,6 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
+  outputFileTracing: process.env.VERCEL === '1',
   images: {
     remotePatterns: [
       {
