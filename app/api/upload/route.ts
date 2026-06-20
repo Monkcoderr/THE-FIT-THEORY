@@ -20,6 +20,18 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 
+  // Validate that Cloudinary is configured (either via individual vars or CLOUDINARY_URL)
+  const config = cloudinary.config();
+  if (!config.cloud_name || !config.api_key || !config.api_secret) {
+    return NextResponse.json(
+      {
+        error: 'Cloudinary is not configured on the server.',
+        detail: 'Missing environment variables (CLOUDINARY_CLOUD_NAME, CLOUDINARY_API_KEY, CLOUDINARY_API_SECRET) or CLOUDINARY_URL in the deployment settings.',
+      },
+      { status: 500 }
+    );
+  }
+
   let formData: FormData;
   try {
     formData = await request.formData();
@@ -86,8 +98,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json(
       {
         error: 'Image upload failed. Please try again.',
-        // Surface the real reason only in development to aid debugging.
-        ...(process.env.NODE_ENV !== 'production' && { detail }),
+        detail,
       },
       { status: 500 }
     );
