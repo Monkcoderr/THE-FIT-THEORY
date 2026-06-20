@@ -87,9 +87,8 @@ export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
 
-  // Transparent over hero on homepage; solid elsewhere or after scroll.
-  const isHome = pathname === '/';
-  const solid = scrolled || !isHome || mobileOpen;
+  // Always solid navbar to avoid text overlay conflicts
+  const solid = true;
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 24);

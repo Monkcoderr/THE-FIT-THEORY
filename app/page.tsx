@@ -25,7 +25,7 @@ export default async function HomePage() {
   return (
     <>
       <Navbar />
-      <main>
+      <main className="pt-14">
         <HeroSection />
 
         {/* Browse all categories without leaving the homepage */}
