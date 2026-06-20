@@ -11,10 +11,25 @@ const inter = Inter({
   display: 'swap',
 });
 
-const SITE_URL = process.env.NEXT_PUBLIC_SHOP_URL ?? 'https://thefittheory.vercel.app';
+const RAW_SITE_URL =
+  process.env.NEXT_PUBLIC_SHOP_URL ?? 'https://thefittheory.vercel.app';
+
+// Tolerate a misconfigured env value (e.g. missing protocol) so it can never
+// break the production build via `new URL(...)`.
+function safeMetadataBase(value: string): URL {
+  const candidates = [value, `https://${value}`, 'https://thefittheory.vercel.app'];
+  for (const c of candidates) {
+    try {
+      return new URL(c);
+    } catch {
+      /* try next */
+    }
+  }
+  return new URL('https://thefittheory.vercel.app');
+}
 
 export const metadata: Metadata = {
-  metadataBase: new URL(SITE_URL),
+  metadataBase: safeMetadataBase(RAW_SITE_URL),
   applicationName: 'The Fit Theory',
   title: {
     default: 'The Fit Theory — Athletic Wear',
