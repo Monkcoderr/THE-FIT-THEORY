@@ -47,7 +47,10 @@ export default function ImageUploader({
           // eslint-disable-next-line no-await-in-loop
           const data = await res.json();
           if (!res.ok) {
-            toast.error(data.error ?? 'Upload failed');
+            const msg = data.detail
+              ? `${data.error ?? 'Upload failed'} (${data.detail})`
+              : data.error ?? 'Upload failed';
+            toast.error(msg);
             continue;
           }
           uploaded.push(data.url);

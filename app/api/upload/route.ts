@@ -81,8 +81,14 @@ export async function POST(request: NextRequest) {
     });
   } catch (err) {
     console.error('Cloudinary upload error:', err);
+    const detail =
+      err instanceof Error ? err.message : 'Unknown error';
     return NextResponse.json(
-      { error: 'Image upload failed. Please try again.' },
+      {
+        error: 'Image upload failed. Please try again.',
+        // Surface the real reason only in development to aid debugging.
+        ...(process.env.NODE_ENV !== 'production' && { detail }),
+      },
       { status: 500 }
     );
   }
