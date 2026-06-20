@@ -219,7 +219,7 @@ export default function SaleLogModal({
             type="number"
             min={0}
             value={revenue}
-            onChange={(e) => setRevenue(e.target.value)}
+            onChange={(e) => setRevenue(e.target.value.replace(/^0+(?=\d)/, ''))}
             className="h-11 w-full rounded-md border border-admin-border bg-admin-surface-2 px-3 text-sm text-admin-text focus:border-admin-blue focus:outline-none focus:ring-1 focus:ring-admin-blue"
           />
         </div>

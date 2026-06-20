@@ -106,7 +106,8 @@ export default function ProductUploadForm({
   }
 
   function setStock(size: Size, val: string) {
-    const n = val === '' ? 0 : Math.max(0, Math.floor(Number(val)));
+    const cleaned = val.replace(/^0+(?=\d)/, '');
+    const n = cleaned === '' ? 0 : Math.max(0, Math.floor(Number(cleaned)));
     setVariants((prev) => ({ ...prev, [size]: Number.isNaN(n) ? 0 : n }));
   }
 
@@ -212,7 +213,7 @@ export default function ProductUploadForm({
               min={0}
               placeholder="0"
               value={price}
-              onChange={(e) => setPrice(e.target.value)}
+              onChange={(e) => setPrice(e.target.value.replace(/^0+(?=\d)/, ''))}
               error={errors.price}
             />
           </div>
@@ -291,7 +292,7 @@ export default function ProductUploadForm({
                       <input
                         type="number"
                         min={0}
-                        value={variants[size] ?? 0}
+                        value={variants[size] !== null ? String(variants[size]) : ''}
                         onChange={(e) => setStock(size, e.target.value)}
                         placeholder="Stock"
                         className="h-10 w-full rounded-md border border-admin-border bg-admin-surface-2 px-3 text-sm text-admin-text focus:border-admin-blue focus:outline-none focus:ring-1 focus:ring-admin-blue"
