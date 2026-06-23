@@ -28,16 +28,16 @@ const CATEGORY_TABS: CategoryTab[] = [
 ];
 
 const CATEGORY_PLACEHOLDERS: Record<string, string> = {
-  'Shop All': 'https://images.unsplash.com/photo-1517838277536-f5f99be501cd?auto=format&fit=crop&w=160&h=160&q=80',
-  'Trousers': 'https://images.unsplash.com/photo-1552674605-db6ffd4facb5?auto=format&fit=crop&w=160&h=160&q=80',
-  'T-Shirts': 'https://images.unsplash.com/photo-1521572267360-ee0c2909d518?auto=format&fit=crop&w=160&h=160&q=80',
-  'Jerseys': 'https://images.unsplash.com/photo-1546519638-68e109498ffc?auto=format&fit=crop&w=160&h=160&q=80',
-  'Polo T-Shirts': 'https://images.unsplash.com/photo-1581655353564-df123a1eb820?auto=format&fit=crop&w=160&h=160&q=80',
-  'Caps': 'https://images.unsplash.com/photo-1588850561407-ed78c282e89b?auto=format&fit=crop&w=160&h=160&q=80',
-  'Shorts': 'https://images.unsplash.com/photo-1591195853828-11db59a44f6b?auto=format&fit=crop&w=160&h=160&q=80',
-  'Jackets': 'https://images.unsplash.com/photo-1556821840-3a63f95609a7?auto=format&fit=crop&w=160&h=160&q=80',
-  'Compression': 'https://images.unsplash.com/photo-1605296867304-46d5465a25f1?auto=format&fit=crop&w=160&h=160&q=80',
-  'Other Essentials': 'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?auto=format&fit=crop&w=160&h=160&q=80',
+  'Shop All': '/categories-placeholders/Shop All.jpeg',
+  'Trousers': '/categories-placeholders/Trouser.webp',
+  'T-Shirts': '/categories-placeholders/T-shirt.jpg',
+  'Jerseys': '/categories-placeholders/jersey.webp',
+  'Polo T-Shirts': '/categories-placeholders/polo-tshirt.jpg',
+  'Caps': '/categories-placeholders/caps.jpg',
+  'Shorts': '/categories-placeholders/shorts.jpg',
+  'Jackets': '/categories-placeholders/jackets.jpg',
+  'Compression': '/categories-placeholders/compression.jpg',
+  'Other Essentials': '/categories-placeholders/others.jpg',
 };
 
 interface CategoryShowcaseProps {
@@ -120,7 +120,7 @@ export default function CategoryShowcase({ products }: CategoryShowcaseProps) {
               className="flex shrink-0 flex-col items-center gap-3 focus:outline-none group pb-1"
             >
               {/* Circle container for image */}
-              <div
+              <span
                 className={[
                   'w-16 h-16 rounded-full overflow-hidden flex items-center justify-center transition-all duration-300 ease-out border relative',
                   isActive
@@ -138,12 +138,12 @@ export default function CategoryShowcase({ products }: CategoryShowcaseProps) {
                   loading="lazy"
                 />
                 {isActive && (
-                  <div className="absolute inset-0 bg-black/25 mix-blend-multiply rounded-full" />
+                  <span className="absolute inset-0 bg-black/25 mix-blend-multiply rounded-full" />
                 )}
-              </div>
+              </span>
               
               {/* Text label container */}
-              <div className="flex flex-col items-center min-h-[36px]">
+              <span className="flex flex-col items-center min-h-[36px]">
                 <span
                   className={[
                     'text-xs md:text-sm tracking-tight transition-all duration-300 whitespace-nowrap text-center px-1',
@@ -154,13 +154,13 @@ export default function CategoryShowcase({ products }: CategoryShowcaseProps) {
                 </span>
                 
                 {/* Active underline bar indicator */}
-                <div
+                <span
                   className={[
-                    'h-[3px] bg-nike-ink rounded-full transition-all duration-300 mt-1.5',
+                    'h-[3px] bg-nike-ink rounded-full transition-all duration-300 mt-1.5 block',
                     isActive ? 'w-6 opacity-100' : 'w-0 opacity-0 group-hover:w-3 group-hover:opacity-40',
                   ].join(' ')}
                 />
-              </div>
+              </span>
             </button>
           );
         })}
