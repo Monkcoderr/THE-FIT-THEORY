@@ -62,7 +62,7 @@ export async function POST(request: NextRequest) {
   // Validate size BEFORE upload
   if (file.size > MAX_UPLOAD_BYTES) {
     return NextResponse.json(
-      { error: 'File too large. Maximum size is 4MB.' },
+      { error: 'File too large. Maximum size is 5MB.' },
       { status: 413 }
     );
   }

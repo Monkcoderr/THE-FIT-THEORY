@@ -7,8 +7,7 @@ import { cn } from '@/lib/utils';
 import { toast } from '@/components/ui/Toast';
 
 // Keep in sync with MAX_UPLOAD_BYTES in lib/cloudinary.ts.
-// Kept under Vercel's ~4.5MB serverless request body limit.
-const MAX_UPLOAD_BYTES = 4 * 1024 * 1024; // 4MB
+const MAX_UPLOAD_BYTES = 5 * 1024 * 1024; // 5MB
 
 interface ImageUploaderProps {
   value: string[];
@@ -69,7 +68,7 @@ export default function ImageUploader({
           if (!res.ok) {
             if (res.status === 413) {
               toast.error(
-                `"${file.name}" is too large for the server (max ~4MB).`
+                `"${file.name}" is too large for the server (max ~5MB).`
               );
             } else {
               const base = data?.error ?? `Upload failed (HTTP ${res.status})`;
@@ -161,7 +160,7 @@ export default function ImageUploader({
           </button>
         </div>
         <p className="mt-2 text-xs text-admin-mute">
-          JPG, PNG, WebP · up to 4MB · {value.length}/{maxImages}
+          JPG, PNG, WebP · up to 5MB · {value.length}/{maxImages}
         </p>
         <input
           ref={inputRef}
