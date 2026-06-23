@@ -10,10 +10,26 @@ import CategoryShowcase from '@/components/storefront/CategoryShowcase';
 export const dynamic = 'force-dynamic';
 
 const CATEGORIES = [
-  { label: 'Football', href: '/shop?sport=Football' },
-  { label: 'Gym / Lifting', href: '/shop?sport=Gym%2FLifting' },
-  { label: 'Running', href: '/shop?sport=Running' },
-  { label: 'Jerseys', href: '/shop?category=Jersey' },
+  {
+    label: 'Football',
+    href: '/shop?sport=Football',
+    image: '/football.png'
+  },
+  {
+    label: 'Gym / Lifting',
+    href: '/shop?sport=Gym%2FLifting',
+    image: 'https://images.unsplash.com/photo-1583454110551-21f2fa2afe61?auto=format&fit=crop&w=400&h=500&q=80'
+  },
+  {
+    label: 'Running',
+    href: '/shop?sport=Running',
+    image: '/running.png'
+  },
+  {
+    label: 'Jerseys',
+    href: '/shop?category=Jersey',
+    image: '/jerseys.png'
+  },
 ];
 
 export default async function HomePage() {
@@ -60,20 +76,24 @@ export default async function HomePage() {
               <Link
                 key={cat.label}
                 href={cat.href}
-                className="group relative flex aspect-[4/5] items-end overflow-hidden bg-nike-cloud p-5"
+                className="group relative flex aspect-[3/4] sm:aspect-[4/5] items-end overflow-hidden rounded-2xl bg-nike-cloud p-5 shadow-sm"
               >
-                <div
-                  className="absolute inset-0 transition-transform duration-500 group-hover:scale-105"
-                  style={{
-                    background:
-                      'linear-gradient(160deg, #1a1a1c 0%, #2b2b2e 60%, #39393b 100%)',
-                  }}
+                {/* Background Image */}
+                <img
+                  src={cat.image}
+                  alt={cat.label}
+                  className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
+                  loading="lazy"
                 />
-                <div className="relative z-10">
-                  <span className="block text-lg font-bold uppercase tracking-tight text-white">
+                {/* Dark gradient overlay */}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/25 to-transparent transition-opacity duration-300 group-hover:opacity-90" />
+                
+                {/* Card Content */}
+                <div className="relative z-10 w-full">
+                  <span className="block text-xl font-extrabold uppercase tracking-tight text-white sm:text-2xl">
                     {cat.label}
                   </span>
-                  <span className="mt-2 inline-flex items-center gap-1 rounded-full bg-white px-4 py-1.5 text-xs font-medium text-nike-ink">
+                  <span className="mt-3.5 inline-flex items-center gap-1 rounded-full bg-white px-4 py-1.5 text-xs font-bold text-nike-ink transition-transform duration-300 group-hover:scale-105 active:scale-95">
                     Shop now
                   </span>
                 </div>
