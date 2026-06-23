@@ -66,22 +66,8 @@ export default function CategoryShowcase({ products }: CategoryShowcaseProps) {
     });
   }
 
-  // Determine representative image for each category, falling back to curated placeholders.
+  // Determine representative image for each category.
   const getCategoryImageUrl = (tab: CategoryTab) => {
-    if (tab.match) {
-      const set = new Set(tab.match);
-      const matchingProduct = products.find(
-        (p) => set.has(p.category) && p.images && p.images.length > 0
-      );
-      if (matchingProduct) {
-        return matchingProduct.images[0];
-      }
-    } else {
-      const firstProduct = products.find((p) => p.images && p.images.length > 0);
-      if (firstProduct) {
-        return firstProduct.images[0];
-      }
-    }
     return CATEGORY_PLACEHOLDERS[tab.label] || CATEGORY_PLACEHOLDERS['Shop All'];
   };
 
