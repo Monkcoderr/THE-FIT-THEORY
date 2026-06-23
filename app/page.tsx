@@ -6,6 +6,7 @@ import Footer from '@/components/storefront/Footer';
 import HeroSection from '@/components/storefront/HeroSection';
 import ProductGrid from '@/components/storefront/ProductGrid';
 import CategoryShowcase from '@/components/storefront/CategoryShowcase';
+import RotatingStrip from '@/components/storefront/RotatingStrip';
 
 export const dynamic = 'force-dynamic';
 
@@ -43,6 +44,7 @@ export default async function HomePage() {
       <Navbar />
       <main className="pt-14">
         <HeroSection />
+        <RotatingStrip />
 
         {/* Browse all categories without leaving the homepage */}
         <CategoryShowcase products={allProducts} />
