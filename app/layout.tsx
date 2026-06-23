@@ -1,8 +1,7 @@
 import type { Metadata, Viewport } from 'next';
 import { Inter } from 'next/font/google';
 import { Toaster } from 'sonner';
-import PWARegister from '@/components/PWARegister';
-import InstallPrompt from '@/components/InstallPrompt';
+import PWA from '@/components/PWA';
 import './globals.css';
 
 const inter = Inter({
@@ -88,8 +87,7 @@ export default function RootLayout({
     <html lang="en" className={inter.variable}>
       <body className="font-sans antialiased" suppressHydrationWarning>
         {children}
-        <PWARegister />
-        <InstallPrompt />
+        <PWA />
         <Toaster
           position="top-center"
           richColors
