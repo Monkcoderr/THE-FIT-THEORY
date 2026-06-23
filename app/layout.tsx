@@ -48,7 +48,7 @@ export const metadata: Metadata = {
   appleWebApp: {
     capable: true,
     statusBarStyle: 'black-translucent',
-    title: 'Fit Theory',
+    title: 'The Fit Theory',
   },
   icons: {
     icon: [

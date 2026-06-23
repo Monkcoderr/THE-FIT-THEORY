@@ -7,7 +7,7 @@ import type { MetadataRoute } from 'next';
 export default function manifest(): MetadataRoute.Manifest {
   return {
     name: 'The Fit Theory — Athletic Wear',
-    short_name: 'Fit Theory',
+    short_name: 'The Fit Theory',
     description:
       'Premium athletic wear — shop the collection and order on WhatsApp. Admin CRM for inventory and sales.',
     id: '/',
