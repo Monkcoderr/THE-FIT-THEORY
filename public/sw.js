@@ -5,7 +5,7 @@
  *   - /api/* and /admin/*: network-only (never cached — dynamic + auth-gated).
  * Bump CACHE_VERSION to invalidate old caches on deploy.
  */
-const CACHE_VERSION = 'ftt-v1';
+const CACHE_VERSION = 'ftt-v2';
 const STATIC_CACHE = `${CACHE_VERSION}-static`;
 const PAGE_CACHE = `${CACHE_VERSION}-pages`;
 const OFFLINE_URL = '/offline.html';

@@ -68,7 +68,7 @@ const VariantSchema = new Schema<IVariant>(
 const ProductSchema = new Schema<IProduct>(
   {
     title: { type: String, required: true, trim: true, maxlength: 120 },
-    slug: { type: String, required: true, unique: true, lowercase: true },
+    slug: { type: String, required: true, lowercase: true },
     price: { type: Number, required: true, min: 0 },
     images: [{ type: String, required: true }],
     category: {
