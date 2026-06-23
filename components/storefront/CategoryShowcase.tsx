@@ -72,24 +72,28 @@ export default function CategoryShowcase({ products }: CategoryShowcaseProps) {
   };
 
   return (
-    <section className="mx-auto max-w-nike px-4 py-10 sm:px-6 sm:py-12">
-      <div className="mb-6 flex items-center justify-between">
-        <h2 className="text-xl font-extrabold uppercase tracking-tight text-nike-ink sm:text-2xl">
-          Shop By Category
+    <section className="mx-auto max-w-nike px-4 py-12 sm:px-6 sm:py-16">
+      <div className="mb-7 flex items-end justify-between">
+        <h2 className="text-2xl font-extrabold tracking-[-0.03em] text-nike-ink sm:text-3xl">
+          Shop by Category
         </h2>
         <Link
           href="/shop"
-          className="inline-flex items-center gap-1.5 text-sm font-bold text-nike-ink hover:opacity-60 transition-opacity"
+          className="group inline-flex items-center gap-1 text-sm font-medium text-nike-mute transition-colors hover:text-nike-ink"
         >
-          View all <ArrowRight className="h-4 w-4" strokeWidth={2.5} />
+          View all
+          <ArrowRight
+            className="h-4 w-4 transition-transform group-hover:translate-x-0.5"
+            strokeWidth={2}
+          />
         </Link>
       </div>
 
-      {/* Category circles — horizontally scrollable on mobile, wraps on desktop */}
+      {/* Category pills — horizontally scrollable on mobile, wraps on desktop */}
       <div
         role="tablist"
         aria-label="Product categories"
-        className="-mx-4 flex gap-6 sm:gap-8 overflow-x-auto scroll-smooth px-4 pb-4 sm:mx-0 sm:flex-wrap sm:px-0 justify-start [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+        className="-mx-4 flex gap-5 overflow-x-auto scroll-smooth px-4 pb-3 sm:mx-0 sm:flex-wrap sm:gap-7 sm:px-0 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
       >
         {CATEGORY_TABS.map((tab, i) => {
           const isActive = i === active;
@@ -103,47 +107,46 @@ export default function CategoryShowcase({ products }: CategoryShowcaseProps) {
               role="tab"
               aria-selected={isActive}
               onClick={() => selectTab(i)}
-              className="flex shrink-0 flex-col items-center gap-3 focus:outline-none group pb-1"
+              className="group flex shrink-0 flex-col items-center gap-2.5 pb-1 focus:outline-none"
             >
-              {/* Circle container for image */}
+              {/* Circular image — gradient ring when active, white soft-shadow card otherwise */}
               <span
                 className={[
-                  'w-16 h-16 rounded-full overflow-hidden flex items-center justify-center transition-all duration-300 ease-out border relative',
+                  'relative flex h-[72px] w-[72px] items-center justify-center rounded-full p-[3px] transition-all duration-300 ease-out',
                   isActive
-                    ? 'border-nike-ink border-2 shadow-md shadow-black/10 scale-105'
-                    : 'border-nike-hairline hover:border-nike-ink/40 hover:scale-105',
+                    ? 'scale-105 bg-gradient-to-r from-brand-from to-brand-to shadow-lg shadow-brand-from/25'
+                    : 'bg-white shadow-[0_4px_14px_rgba(0,0,0,0.06)] group-hover:scale-105 group-hover:shadow-[0_8px_20px_rgba(0,0,0,0.10)]',
                 ].join(' ')}
               >
-                <img
-                  src={imageUrl}
-                  alt={tab.label}
-                  className={[
-                    'w-full h-full object-cover transition-all duration-500 rounded-full',
-                    isActive ? 'brightness-75 scale-110' : 'group-hover:scale-110',
-                  ].join(' ')}
-                  loading="lazy"
-                />
-                {isActive && (
-                  <span className="absolute inset-0 bg-black/25 mix-blend-multiply rounded-full" />
-                )}
+                <span className="block h-full w-full overflow-hidden rounded-full bg-white p-[2px]">
+                  <img
+                    src={imageUrl}
+                    alt={tab.label}
+                    className="h-full w-full rounded-full object-cover transition-transform duration-500 group-hover:scale-110"
+                    loading="lazy"
+                  />
+                </span>
               </span>
-              
-              {/* Text label container */}
-              <span className="flex flex-col items-center min-h-[36px]">
+
+              {/* Label + 4px gradient active indicator */}
+              <span className="flex min-h-[34px] flex-col items-center">
                 <span
                   className={[
-                    'text-xs md:text-sm tracking-tight transition-all duration-300 whitespace-nowrap text-center px-1',
-                    isActive ? 'font-bold text-nike-ink' : 'font-semibold text-nike-charcoal group-hover:text-nike-ink',
+                    'whitespace-nowrap px-1 text-center text-xs tracking-tight transition-colors duration-300 md:text-sm',
+                    isActive
+                      ? 'font-bold text-nike-ink'
+                      : 'font-medium text-nike-mute group-hover:text-nike-ink',
                   ].join(' ')}
                 >
                   {tab.label}
                 </span>
-                
-                {/* Active underline bar indicator */}
+
                 <span
                   className={[
-                    'h-[3px] bg-nike-ink rounded-full transition-all duration-300 mt-1.5 block',
-                    isActive ? 'w-6 opacity-100' : 'w-0 opacity-0 group-hover:w-3 group-hover:opacity-40',
+                    'mt-1.5 block h-1 rounded-full bg-gradient-to-r from-brand-from to-brand-to transition-all duration-300',
+                    isActive
+                      ? 'w-6 opacity-100'
+                      : 'w-0 opacity-0 group-hover:w-3 group-hover:opacity-40',
                   ].join(' ')}
                 />
               </span>
@@ -153,7 +156,7 @@ export default function CategoryShowcase({ products }: CategoryShowcaseProps) {
       </div>
 
       {/* Product grid — re-keyed per tab to trigger the fade-in transition */}
-      <div key={active} className="mt-6 animate-fade-in">
+      <div key={active} className="mt-8 animate-fade-in">
         <ProductGrid
           products={filtered}
           emptyMessage={`No products in ${CATEGORY_TABS[active].label} yet.`}

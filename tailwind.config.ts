@@ -27,6 +27,11 @@ const config: Config = {
           'success-bright': '#1eaa52',
           info: '#1151ff',
         },
+        // ─── Brand gradient (premium athletic accent) ───
+        brand: {
+          from: '#FF512F',
+          to: '#F09819',
+        },
         // ─── Vercel admin palette (dark-on-light + ink) ───
         vercel: {
           ink: '#171717',

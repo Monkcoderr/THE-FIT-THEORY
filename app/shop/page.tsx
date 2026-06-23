@@ -37,10 +37,11 @@ export default async function ShopPage({ searchParams }: ShopPageProps) {
   return (
     <>
       <Navbar />
-      <main className="mx-auto max-w-nike px-4 pb-20 pt-24 sm:px-6">
+      <main className="premium-surface min-h-screen pt-24">
+        <div className="mx-auto max-w-nike px-4 pb-20 sm:px-6">
         <div className="mb-6 flex items-end justify-between">
           <div>
-            <h1 className="text-2xl font-extrabold uppercase tracking-tight text-nike-ink sm:text-3xl">
+            <h1 className="text-2xl font-extrabold tracking-[-0.03em] text-nike-ink sm:text-3xl">
               {filters.sport || filters.category || 'All Products'}
             </h1>
             <p className="mt-1 text-sm text-nike-mute">
@@ -76,6 +77,7 @@ export default async function ShopPage({ searchParams }: ShopPageProps) {
               emptyMessage="No products match these filters."
             />
           </div>
+        </div>
         </div>
       </main>
       <Footer />

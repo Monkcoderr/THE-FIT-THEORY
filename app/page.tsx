@@ -46,20 +46,21 @@ export default async function HomePage() {
         <HeroSection />
         <RotatingStrip />
 
+        <div className="premium-surface">
         {/* Browse all categories without leaving the homepage */}
         <CategoryShowcase products={allProducts} />
 
         {/* Featured */}
         <section className="mx-auto max-w-nike px-4 py-16 sm:px-6">
           <div className="mb-8 flex items-end justify-between">
-            <h2 className="text-2xl font-extrabold uppercase tracking-tight text-nike-ink sm:text-3xl">
+            <h2 className="text-2xl font-extrabold tracking-[-0.03em] text-nike-ink sm:text-3xl">
               Featured
             </h2>
             <Link
               href="/shop"
-              className="inline-flex items-center gap-1 text-sm font-medium text-nike-ink hover:opacity-60"
+              className="group inline-flex items-center gap-1 text-sm font-medium text-nike-mute transition-colors hover:text-nike-ink"
             >
-              Shop all <ArrowRight className="h-4 w-4" />
+              Shop all <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
             </Link>
           </div>
           <ProductGrid
@@ -70,7 +71,7 @@ export default async function HomePage() {
 
         {/* Shop by sport */}
         <section className="mx-auto max-w-nike px-4 pb-20 sm:px-6">
-          <h2 className="mb-6 text-2xl font-extrabold uppercase tracking-tight text-nike-ink sm:text-3xl">
+          <h2 className="mb-6 text-2xl font-extrabold tracking-[-0.03em] text-nike-ink sm:text-3xl">
             Shop by Sport
           </h2>
           <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
@@ -103,6 +104,7 @@ export default async function HomePage() {
             ))}
           </div>
         </section>
+        </div>
       </main>
       <Footer />
     </>

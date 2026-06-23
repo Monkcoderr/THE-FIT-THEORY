@@ -112,6 +112,16 @@ body {
   animation: shimmer 1.5s infinite;
 }
 
+/* Premium storefront surface: soft brand radial gradients + subtle dot grid. */
+.premium-surface {
+  background-color: #fafafa;
+  background-image:
+    radial-gradient(circle at top left, rgba(255, 81, 47, 0.06), transparent 45%),
+    radial-gradient(circle at bottom right, rgba(240, 152, 25, 0.04), transparent 40%),
+    radial-gradient(rgba(255, 81, 47, 0.18) 1.5px, transparent 1.5px);
+  background-size: 100% 100%, 100% 100%, 24px 24px;
+}
+
 /* Vercel mesh gradient (admin login / accents) */
 .mesh-gradient {
   background:
