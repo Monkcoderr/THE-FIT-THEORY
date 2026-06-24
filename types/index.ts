@@ -173,3 +173,106 @@ export interface AnalyticsData {
   deadStock: DeadStockItem[];
   recentSales: SaleRecord[];
 }
+
+// ─── Sales Log & Billing ───
+
+export type PaymentMethod = 'Cash' | 'UPI' | 'Card' | 'Other';
+
+export type InvoiceStatus = 'completed' | 'cancelled';
+
+export interface InvoiceItem {
+  productId: string | null;
+  productName: string;
+  size: string;
+  quantity: number;
+  mrp: number; // catalog price for reference
+  sellingPrice: number; // actual per-unit price charged
+  totalPrice: number; // sellingPrice * quantity
+}
+
+export interface Invoice {
+  _id: string;
+  invoiceNumber: string;
+  customerName?: string;
+  customerMobile: string;
+  items: InvoiceItem[];
+  subtotal: number;
+  discountAmount: number;
+  finalAmount: number;
+  paymentMethod: PaymentMethod;
+  status: InvoiceStatus;
+  createdBy: string;
+  note?: string;
+  cancelledAt?: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+// Payload sent by the New Sale flow to create an invoice.
+export interface InvoiceItemPayload {
+  productId: string;
+  size: string;
+  quantity: number;
+  sellingPrice: number;
+}
+
+export interface CreateInvoicePayload {
+  customerName?: string;
+  customerMobile: string;
+  items: InvoiceItemPayload[];
+  discountAmount?: number;
+  paymentMethod: PaymentMethod;
+  createdBy?: string;
+  note?: string;
+}
+
+// Editable fields for an existing invoice (item lines are immutable).
+export interface EditInvoicePayload {
+  customerName?: string;
+  customerMobile?: string;
+  discountAmount?: number;
+  paymentMethod?: PaymentMethod;
+  note?: string;
+}
+
+// ─── Customer lookup ───
+
+export interface CustomerLookup {
+  found: boolean;
+  customerMobile: string;
+  customerName?: string;
+  previousPurchases: number;
+  totalSpent: number;
+  lastPurchaseAt?: string;
+}
+
+// ─── Sales analytics ───
+
+export interface SalesPeriodStat {
+  revenue: number;
+  count: number;
+}
+
+export interface BestSeller {
+  productId: string | null;
+  productName: string;
+  unitsSold: number;
+  revenue: number;
+}
+
+export interface RepeatCustomer {
+  customerMobile: string;
+  customerName?: string;
+  orders: number;
+  totalSpent: number;
+}
+
+export interface SalesAnalyticsData {
+  today: SalesPeriodStat;
+  week: SalesPeriodStat;
+  month: SalesPeriodStat;
+  averageOrderValue: number;
+  totalInvoices: number;
+  bestSellers: BestSeller[];
+  repeatCustomers: RepeatCustomer[];
+}

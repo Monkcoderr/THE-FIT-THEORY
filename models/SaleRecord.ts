@@ -9,6 +9,10 @@ export interface ISaleRecord extends Document {
   quantity: number;
   note?: string;
   date: Date;
+  // Optional linkage to a billed invoice (sales created via the Sales Log).
+  // Quick sales logged from Inventory leave these undefined.
+  invoiceId?: mongoose.Types.ObjectId;
+  invoiceNumber?: string;
 }
 
 const SaleRecordSchema = new Schema<ISaleRecord>(
@@ -33,6 +37,8 @@ const SaleRecordSchema = new Schema<ISaleRecord>(
     quantity: { type: Number, default: 1, min: 1 },
     note: { type: String, maxlength: 280 },
     date: { type: Date, default: Date.now },
+    invoiceId: { type: Schema.Types.ObjectId, ref: 'Invoice' },
+    invoiceNumber: { type: String },
   },
   { timestamps: false }
 );
@@ -41,6 +47,7 @@ const SaleRecordSchema = new Schema<ISaleRecord>(
 SaleRecordSchema.index({ date: -1 });
 SaleRecordSchema.index({ productId: 1 });
 SaleRecordSchema.index({ channel: 1 });
+SaleRecordSchema.index({ invoiceId: 1 });
 SaleRecordSchema.index({ date: -1, channel: 1 }); // Compound for analytics
 
 const SaleRecord: Model<ISaleRecord> =
