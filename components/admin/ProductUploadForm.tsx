@@ -81,6 +81,9 @@ export default function ProductUploadForm({
   const [price, setPrice] = useState<string>(
     initial ? String(initial.price) : ''
   );
+  const [realCost, setRealCost] = useState<string>(
+    initial?.realCost != null ? String(initial.realCost) : ''
+  );
   const [images, setImages] = useState<string[]>(initial?.images ?? []);
   const [category, setCategory] = useState<Category | ''>(
     initial?.category ?? ''
@@ -115,6 +118,8 @@ export default function ProductUploadForm({
     const e: Record<string, string> = {};
     if (!title.trim()) e.title = 'Title is required';
     if (!price || Number(price) <= 0) e.price = 'Enter a valid price';
+    if (realCost === '' || Number(realCost) < 0)
+      e.realCost = 'Enter the real cost price';
     if (images.length === 0) e.images = 'Upload at least one image';
     if (!category) e.category = 'Select a category';
     if (!fabric) e.fabric = 'Select a fabric';
@@ -137,6 +142,7 @@ export default function ProductUploadForm({
     const payload = {
       title: title.trim(),
       price: Number(price),
+      realCost: Number(realCost),
       images,
       category,
       fabric,
@@ -215,6 +221,24 @@ export default function ProductUploadForm({
               value={price}
               onChange={(e) => setPrice(e.target.value.replace(/^0+(?=\d)/, ''))}
               error={errors.price}
+            />
+            <Input
+              label="Real cost price (₹)"
+              type="number"
+              min={0}
+              placeholder="0"
+              value={realCost}
+              onChange={(e) =>
+                setRealCost(e.target.value.replace(/^0+(?=\d)/, ''))
+              }
+              error={errors.realCost}
+              hint={
+                price && realCost && Number(price) > 0
+                  ? `Margin ₹${(
+                      Number(price) - Number(realCost)
+                    ).toLocaleString('en-IN')} per unit (before discounts)`
+                  : 'What you paid the supplier per unit. Used to compute profit.'
+              }
             />
           </div>
         </div>

@@ -11,6 +11,7 @@ export interface IInvoiceItem {
   quantity: number;
   mrp: number; // catalog price at time of sale (for reference)
   sellingPrice: number; // actual per-unit price charged
+  costPrice: number; // supplier cost per unit, snapshotted at sale time
   totalPrice: number; // sellingPrice * quantity
 }
 
@@ -22,6 +23,8 @@ export interface IInvoice extends Document {
   subtotal: number;
   discountAmount: number;
   finalAmount: number;
+  totalCost: number; // sum of costPrice * quantity (snapshot)
+  profit: number; // finalAmount - totalCost (snapshot)
   paymentMethod: PaymentMethod;
   status: InvoiceStatus;
   createdBy: string;
@@ -43,6 +46,7 @@ const InvoiceItemSchema = new Schema<IInvoiceItem>(
     quantity: { type: Number, required: true, min: 1 },
     mrp: { type: Number, required: true, min: 0 },
     sellingPrice: { type: Number, required: true, min: 0 },
+    costPrice: { type: Number, required: true, min: 0, default: 0 },
     totalPrice: { type: Number, required: true, min: 0 },
   },
   { _id: false }
@@ -64,6 +68,8 @@ const InvoiceSchema = new Schema<IInvoice>(
     subtotal: { type: Number, required: true, min: 0 },
     discountAmount: { type: Number, required: true, min: 0, default: 0 },
     finalAmount: { type: Number, required: true, min: 0 },
+    totalCost: { type: Number, required: true, min: 0, default: 0 },
+    profit: { type: Number, required: true, default: 0 },
     paymentMethod: {
       type: String,
       enum: ['Cash', 'UPI', 'Card', 'Other'],

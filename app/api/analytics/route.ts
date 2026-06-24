@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { connectToDatabase } from '@/lib/mongodb';
 import Product from '@/models/Product';
 import SaleRecord from '@/models/SaleRecord';
+import Invoice from '@/models/Invoice';
 import { getSessionFromCookies } from '@/lib/auth';
 import { getDaysAgo } from '@/lib/utils';
 
@@ -22,6 +23,9 @@ export async function GET() {
     const startToday = getDaysAgo(0);
     const start7 = getDaysAgo(6); // inclusive of today => 7 days
     const start30 = getDaysAgo(29);
+    // Start of the current calendar month (for "this month" profit/discounts).
+    const now0 = new Date();
+    const startMonth = new Date(now0.getFullYear(), now0.getMonth(), 1);
 
     const [
       revenueAgg,
@@ -34,6 +38,10 @@ export async function GET() {
       productStats,
       deadStock,
       recentSales,
+      profitTodayAgg,
+      profitMonthAgg,
+      discountsTodayAgg,
+      discountsMonthAgg,
     ] = await Promise.all([
       // Lifetime revenue + total sales count
       SaleRecord.aggregate([
@@ -168,6 +176,47 @@ export async function GET() {
       ]),
       // Recent sales feed
       SaleRecord.find().sort({ date: -1 }).limit(8).lean(),
+      // Profit today — revenue minus snapshotted cost (SaleRecord covers both
+      // quick sales and invoice-synced sales).
+      SaleRecord.aggregate([
+        { $match: { date: { $gte: startToday } } },
+        {
+          $group: {
+            _id: null,
+            revenue: { $sum: '$revenue' },
+            cost: {
+              $sum: {
+                $multiply: [{ $ifNull: ['$costPrice', 0] }, '$quantity'],
+              },
+            },
+          },
+        },
+      ]),
+      // Profit this calendar month
+      SaleRecord.aggregate([
+        { $match: { date: { $gte: startMonth } } },
+        {
+          $group: {
+            _id: null,
+            revenue: { $sum: '$revenue' },
+            cost: {
+              $sum: {
+                $multiply: [{ $ifNull: ['$costPrice', 0] }, '$quantity'],
+              },
+            },
+          },
+        },
+      ]),
+      // Discounts given today (only invoiced sales carry discounts)
+      Invoice.aggregate([
+        { $match: { status: 'completed', createdAt: { $gte: startToday } } },
+        { $group: { _id: null, discounts: { $sum: '$discountAmount' } } },
+      ]),
+      // Discounts given this calendar month
+      Invoice.aggregate([
+        { $match: { status: 'completed', createdAt: { $gte: startMonth } } },
+        { $group: { _id: null, discounts: { $sum: '$discountAmount' } } },
+      ]),
     ]);
 
     const now = Date.now();
@@ -181,6 +230,12 @@ export async function GET() {
       revenueToday: todayAgg[0]?.revenue ?? 0,
       revenue7Days: sevenAgg[0]?.revenue ?? 0,
       revenue30Days: thirtyAgg[0]?.revenue ?? 0,
+      profitToday:
+        (profitTodayAgg[0]?.revenue ?? 0) - (profitTodayAgg[0]?.cost ?? 0),
+      profitMonth:
+        (profitMonthAgg[0]?.revenue ?? 0) - (profitMonthAgg[0]?.cost ?? 0),
+      discountsToday: discountsTodayAgg[0]?.discounts ?? 0,
+      discountsMonth: discountsMonthAgg[0]?.discounts ?? 0,
     };
 
     return NextResponse.json({

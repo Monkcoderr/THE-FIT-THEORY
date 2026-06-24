@@ -103,6 +103,7 @@ export async function POST(request: NextRequest) {
     const {
       title,
       price,
+      realCost,
       images,
       category,
       fabric,
@@ -116,6 +117,13 @@ export async function POST(request: NextRequest) {
     if (!title || price == null || !category || !fabric || !fit || !sport) {
       return NextResponse.json(
         { error: 'Missing required fields.' },
+        { status: 400 }
+      );
+    }
+
+    if (realCost == null || Number(realCost) < 0) {
+      return NextResponse.json(
+        { error: 'Real cost price is required.' },
         { status: 400 }
       );
     }
@@ -139,6 +147,7 @@ export async function POST(request: NextRequest) {
       title,
       slug: 'pending',
       price,
+      realCost,
       images,
       category,
       fabric,

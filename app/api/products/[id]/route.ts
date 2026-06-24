@@ -74,6 +74,7 @@ export async function PUT(
     const editable = [
       'title',
       'price',
+      'realCost',
       'images',
       'category',
       'fabric',

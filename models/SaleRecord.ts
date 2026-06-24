@@ -9,6 +9,8 @@ export interface ISaleRecord extends Document {
   quantity: number;
   note?: string;
   date: Date;
+  // Supplier cost per unit, snapshotted at sale time. Profit = revenue - costPrice*quantity.
+  costPrice?: number;
   // Optional linkage to a billed invoice (sales created via the Sales Log).
   // Quick sales logged from Inventory leave these undefined.
   invoiceId?: mongoose.Types.ObjectId;
@@ -35,6 +37,7 @@ const SaleRecordSchema = new Schema<ISaleRecord>(
     },
     revenue: { type: Number, required: true, min: 0 },
     quantity: { type: Number, default: 1, min: 1 },
+    costPrice: { type: Number, min: 0, default: 0 },
     note: { type: String, maxlength: 280 },
     date: { type: Date, default: Date.now },
     invoiceId: { type: Schema.Types.ObjectId, ref: 'Invoice' },

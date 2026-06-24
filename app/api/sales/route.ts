@@ -108,6 +108,7 @@ export async function POST(request: NextRequest) {
       channel,
       revenue,
       quantity: qty,
+      costPrice: product.realCost ?? 0,
       note: note?.trim() || undefined,
       date: new Date(),
     });

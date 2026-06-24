@@ -9,6 +9,10 @@ import {
   Boxes,
   BarChart3,
   ArrowRight,
+  TrendingUp,
+  Wallet,
+  TicketPercent,
+  CalendarRange,
 } from 'lucide-react';
 import { useAnalytics } from '@/hooks/useAnalytics';
 import { formatPrice } from '@/lib/utils';
@@ -92,6 +96,53 @@ export default function AdminDashboardPage() {
           />
         </div>
       )}
+
+      {/* Profit Analytics */}
+      <div>
+        <div className="mb-3 flex items-center gap-2">
+          <TrendingUp className="h-4 w-4 text-admin-green" />
+          <h3 className="text-sm font-semibold text-admin-text">
+            Profit analytics
+          </h3>
+          <span className="text-xs text-admin-mute">
+            after real cost &amp; discounts
+          </span>
+        </div>
+        {isLoading || !data ? (
+          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+            {Array.from({ length: 4 }).map((_, i) => (
+              <Skeleton key={i} className="h-24 w-full" />
+            ))}
+          </div>
+        ) : (
+          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+            <StatsCard
+              label="Today's profit"
+              value={formatPrice(data.summary.profitToday)}
+              icon={Wallet}
+              accent="green"
+            />
+            <StatsCard
+              label="Today's discounts"
+              value={formatPrice(data.summary.discountsToday)}
+              icon={TicketPercent}
+              accent="amber"
+            />
+            <StatsCard
+              label="This month's profit"
+              value={formatPrice(data.summary.profitMonth)}
+              icon={CalendarRange}
+              accent="green"
+            />
+            <StatsCard
+              label="This month's discounts"
+              value={formatPrice(data.summary.discountsMonth)}
+              icon={TicketPercent}
+              accent="amber"
+            />
+          </div>
+        )}
+      </div>
 
       {/* Quick actions */}
       <div className="grid gap-3 sm:grid-cols-3">

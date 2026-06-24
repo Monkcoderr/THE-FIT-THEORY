@@ -10,6 +10,7 @@ export interface IProduct extends Document {
   title: string;
   slug: string;
   price: number;
+  realCost: number;
   images: string[];
   category:
     | 'Jersey'
@@ -70,6 +71,9 @@ const ProductSchema = new Schema<IProduct>(
     title: { type: String, required: true, trim: true, maxlength: 120 },
     slug: { type: String, required: true, lowercase: true },
     price: { type: Number, required: true, min: 0 },
+    // Real cost paid to the supplier/manufacturer. Internal only — never
+    // exposed on the storefront. Used to compute profit at sale time.
+    realCost: { type: Number, required: true, min: 0, default: 0 },
     images: [{ type: String, required: true }],
     category: {
       type: String,

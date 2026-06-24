@@ -48,6 +48,8 @@ export interface Product {
   title: string;
   slug: string;
   price: number;
+  /** Internal supplier cost. Present in admin responses; omitted on storefront. */
+  realCost?: number;
   images: string[];
   category: Category;
   fabric: Fabric;
@@ -79,6 +81,7 @@ export interface SaleRecord {
 export interface ProductFormData {
   title: string;
   price: number;
+  realCost: number;
   images: string[];
   category: Category;
   fabric: Fabric;
@@ -135,6 +138,11 @@ export interface AnalyticsSummary {
   revenueToday: number;
   revenue7Days: number;
   revenue30Days: number;
+  // Profit analytics (real cost snapshotted at sale time)
+  profitToday: number;
+  profitMonth: number;
+  discountsToday: number;
+  discountsMonth: number;
 }
 
 export interface DailyRevenuePoint {
@@ -187,6 +195,7 @@ export interface InvoiceItem {
   quantity: number;
   mrp: number; // catalog price for reference
   sellingPrice: number; // actual per-unit price charged
+  costPrice: number; // supplier cost per unit, snapshotted at sale time
   totalPrice: number; // sellingPrice * quantity
 }
 
@@ -199,6 +208,8 @@ export interface Invoice {
   subtotal: number;
   discountAmount: number;
   finalAmount: number;
+  totalCost: number; // sum of costPrice * quantity (snapshot)
+  profit: number; // finalAmount - totalCost (snapshot)
   paymentMethod: PaymentMethod;
   status: InvoiceStatus;
   createdBy: string;

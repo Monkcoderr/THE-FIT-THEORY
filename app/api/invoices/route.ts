@@ -202,6 +202,7 @@ export async function POST(request: NextRequest) {
         quantity: qty,
         mrp: product.price,
         sellingPrice,
+        costPrice: product.realCost ?? 0,
         totalPrice: sellingPrice * qty,
       });
     }
@@ -209,6 +210,12 @@ export async function POST(request: NextRequest) {
     const subtotal = lineItems.reduce((s, it) => s + it.totalPrice, 0);
     const discount = Math.max(0, Math.min(Number(discountAmount) || 0, subtotal));
     const finalAmount = subtotal - discount;
+    // Profit is snapshotted now and never recomputed from live product prices.
+    const totalCost = lineItems.reduce(
+      (s, it) => s + it.costPrice * it.quantity,
+      0
+    );
+    const profit = finalAmount - totalCost;
 
     // ── Invoice number (atomic) ──
     const year = new Date().getFullYear();
@@ -224,6 +231,8 @@ export async function POST(request: NextRequest) {
       subtotal,
       discountAmount: discount,
       finalAmount,
+      totalCost,
+      profit,
       paymentMethod,
       status: 'completed',
       createdBy: createdBy?.trim() || 'Admin',
@@ -248,6 +257,7 @@ export async function POST(request: NextRequest) {
         channel: 'Walk-in',
         revenue: discountedLineTotals[i],
         quantity: it.quantity,
+        costPrice: it.costPrice,
         invoiceId: invoice._id,
         invoiceNumber,
         date: new Date(),
