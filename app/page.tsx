@@ -1,6 +1,7 @@
 import Link from 'next/link';
+import Image from 'next/image';
 import { ArrowRight } from 'lucide-react';
-import { getFeaturedProducts, getProducts } from '@/lib/data';
+import { getProducts } from '@/lib/data';
 import Navbar from '@/components/storefront/Navbar';
 import Footer from '@/components/storefront/Footer';
 import HeroSection from '@/components/storefront/HeroSection';
@@ -8,7 +9,9 @@ import ProductGrid from '@/components/storefront/ProductGrid';
 import CategoryShowcase from '@/components/storefront/CategoryShowcase';
 import RotatingStrip from '@/components/storefront/RotatingStrip';
 
-export const dynamic = 'force-dynamic';
+// ISR: serve cached HTML from the CDN, refresh in the background. Admin
+// mutations call revalidateTag('products') for instant updates.
+export const revalidate = 3600;
 
 const CATEGORIES = [
   {
@@ -34,10 +37,11 @@ const CATEGORIES = [
 ];
 
 export default async function HomePage() {
-  const [featured, allProducts] = await Promise.all([
-    getFeaturedProducts(8),
-    getProducts(),
-  ]);
+  // Single cached catalog read; derive featured from it (no second query).
+  const allProducts = await getProducts();
+  const featuredOnly = allProducts.filter((p) => p.featured).slice(0, 8);
+  const featured =
+    featuredOnly.length > 0 ? featuredOnly : allProducts.slice(0, 8);
 
   return (
     <>
@@ -81,10 +85,12 @@ export default async function HomePage() {
                 href={cat.href}
                 className="group relative flex aspect-[3/4] sm:aspect-[4/5] items-end overflow-hidden rounded-2xl bg-nike-cloud p-5 shadow-sm"
               >
-                {/* Background Image */}
-                <img
+                {/* Background Image (optimized: resized + WebP via next/image) */}
+                <Image
                   src={cat.image}
                   alt={cat.label}
+                  fill
+                  sizes="(max-width: 768px) 50vw, 25vw"
                   className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
                   loading="lazy"
                 />

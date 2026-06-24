@@ -1,8 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { revalidateTag } from 'next/cache';
 import { connectToDatabase } from '@/lib/mongodb';
 import Product from '@/models/Product';
 import SaleRecord from '@/models/SaleRecord';
 import { getSessionFromCookies } from '@/lib/auth';
+import { PRODUCTS_TAG } from '@/lib/data';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
@@ -113,6 +115,8 @@ export async function POST(request: NextRequest) {
     // 2) Then decrement stock.
     variant.stock -= qty;
     await product.save();
+
+    revalidateTag(PRODUCTS_TAG);
 
     return NextResponse.json(
       {

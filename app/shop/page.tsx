@@ -8,7 +8,9 @@ import FilterSidebar from '@/components/storefront/FilterSidebar';
 import FilterSheet from '@/components/storefront/FilterSheet';
 import ActiveFilters from '@/components/storefront/ActiveFilters';
 
-export const dynamic = 'force-dynamic';
+// Rendered dynamically per searchParams, but the underlying catalog reads are
+// cached (tag: 'products') so each filter combination is served from cache.
+export const revalidate = 3600;
 
 interface ShopPageProps {
   searchParams: { [key: string]: string | string[] | undefined };

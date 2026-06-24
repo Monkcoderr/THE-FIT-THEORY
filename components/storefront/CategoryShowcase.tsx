@@ -2,6 +2,7 @@
 
 import { useMemo, useRef, useState } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { ArrowRight } from 'lucide-react';
 import type { Category, Product } from '@/types';
 import ProductGrid from './ProductGrid';
@@ -119,9 +120,12 @@ export default function CategoryShowcase({ products }: CategoryShowcaseProps) {
                 ].join(' ')}
               >
                 <span className="block h-full w-full overflow-hidden rounded-full bg-white p-[2px]">
-                  <img
+                  <Image
                     src={imageUrl}
                     alt={tab.label}
+                    width={72}
+                    height={72}
+                    sizes="72px"
                     className="h-full w-full rounded-full object-cover transition-transform duration-500 group-hover:scale-110"
                     loading="lazy"
                   />

@@ -1,8 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
 import mongoose from 'mongoose';
+import { revalidateTag } from 'next/cache';
 import { connectToDatabase } from '@/lib/mongodb';
 import Product from '@/models/Product';
 import { getSessionFromCookies } from '@/lib/auth';
+import { PRODUCTS_TAG } from '@/lib/data';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
@@ -92,6 +94,8 @@ export async function PUT(
     // Re-run validation + slug hook (title change regenerates slug)
     await product.save();
 
+    revalidateTag(PRODUCTS_TAG);
+
     return NextResponse.json({
       product: product.toJSON({ virtuals: true }),
     });
@@ -129,6 +133,7 @@ export async function DELETE(
       );
     }
     // Sale history is intentionally preserved (denormalized productTitle).
+    revalidateTag(PRODUCTS_TAG);
     return NextResponse.json({ success: true });
   } catch (err) {
     console.error('DELETE /api/products/[id] error:', err);

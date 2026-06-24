@@ -8,7 +8,9 @@ import Footer from '@/components/storefront/Footer';
 import ProductDetail from '@/components/storefront/ProductDetail';
 import ProductGrid from '@/components/storefront/ProductGrid';
 
-export const dynamic = 'force-dynamic';
+// ISR: product pages are cached and refreshed in the background; admin edits
+// trigger revalidateTag('products') for instant updates.
+export const revalidate = 3600;
 
 interface PageProps {
   params: { slug: string };

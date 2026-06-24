@@ -1,9 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { FilterQuery } from 'mongoose';
+import { revalidateTag } from 'next/cache';
 import { connectToDatabase } from '@/lib/mongodb';
 import Product, { IProduct } from '@/models/Product';
 import { getSessionFromCookies } from '@/lib/auth';
 import { getStockStatus } from '@/lib/utils';
+import { PRODUCTS_TAG } from '@/lib/data';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
@@ -147,13 +149,14 @@ export async function POST(request: NextRequest) {
       featured: featured ?? false,
     });
 
+    revalidateTag(PRODUCTS_TAG);
+
     return NextResponse.json(
       { product: product.toJSON({ virtuals: true }) },
       { status: 201 }
     );
   } catch (err) {
-    console.error('POST /api/products error:', err);
-    return NextResponse.json(
+    console.error('POST /api/products error:', err);    return NextResponse.json(
       { error: 'Failed to create product.' },
       { status: 500 }
     );

@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { FilterQuery } from 'mongoose';
+import { revalidateTag } from 'next/cache';
 import { connectToDatabase } from '@/lib/mongodb';
 import Product from '@/models/Product';
 import Invoice, { IInvoice, IInvoiceItem } from '@/models/Invoice';
@@ -7,6 +8,7 @@ import { nextSequence } from '@/models/Counter';
 import SaleRecord from '@/models/SaleRecord';
 import { getSessionFromCookies } from '@/lib/auth';
 import { writeAudit } from '@/lib/audit';
+import { PRODUCTS_TAG } from '@/lib/data';
 import {
   formatInvoiceNumber,
   isValidMobile,
@@ -194,7 +196,7 @@ export async function POST(request: NextRequest) {
       }
 
       lineItems.push({
-        productId: product._id,
+        productId: product._id as IInvoiceItem['productId'],
         productName: product.title,
         size: raw.size,
         quantity: qty,
@@ -271,6 +273,8 @@ export async function POST(request: NextRequest) {
       actor: invoice.createdBy,
       meta: { finalAmount, itemCount: lineItems.length },
     });
+
+    revalidateTag(PRODUCTS_TAG);
 
     return NextResponse.json(
       { invoice: serializeInvoice(invoice.toObject()) },

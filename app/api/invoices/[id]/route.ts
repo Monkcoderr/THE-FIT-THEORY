@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import mongoose from 'mongoose';
+import { revalidateTag } from 'next/cache';
 import { connectToDatabase } from '@/lib/mongodb';
 import Product from '@/models/Product';
 import Invoice from '@/models/Invoice';
@@ -8,6 +9,7 @@ import { getSessionFromCookies } from '@/lib/auth';
 import { writeAudit } from '@/lib/audit';
 import { isValidMobile, normalizeMobile, distributeDiscount, serializeInvoice } from '@/lib/invoice';
 import type { EditInvoicePayload, PaymentMethod } from '@/types';
+import { PRODUCTS_TAG } from '@/lib/data';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
@@ -248,6 +250,8 @@ export async function DELETE(
       actor: invoice.createdBy,
       meta: { finalAmount: invoice.finalAmount },
     });
+
+    revalidateTag(PRODUCTS_TAG);
 
     return NextResponse.json({
       invoice: serializeInvoice(invoice.toObject()),

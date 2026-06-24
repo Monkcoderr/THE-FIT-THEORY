@@ -1,5 +1,6 @@
 'use client';
 
+import dynamic from 'next/dynamic';
 import {
   IndianRupee,
   ShoppingBag,
@@ -11,11 +12,23 @@ import {
 import { useAnalytics } from '@/hooks/useAnalytics';
 import { formatPrice } from '@/lib/utils';
 import StatsCard from '@/components/admin/StatsCard';
-import SalesChart from '@/components/admin/SalesChart';
-import ChannelPieChart from '@/components/admin/ChannelPieChart';
 import VelocityList from '@/components/admin/VelocityList';
 import ActivityFeed from '@/components/admin/ActivityFeed';
 import Skeleton from '@/components/ui/Skeleton';
+
+// recharts is heavy (~100kB). Load the charts as separate async chunks so the
+// analytics shell + stats paint immediately instead of waiting on the lib.
+const SalesChart = dynamic(() => import('@/components/admin/SalesChart'), {
+  ssr: false,
+  loading: () => <Skeleton className="h-80 w-full" />,
+});
+const ChannelPieChart = dynamic(
+  () => import('@/components/admin/ChannelPieChart'),
+  {
+    ssr: false,
+    loading: () => <Skeleton className="h-80 w-full" />,
+  }
+);
 
 export default function AnalyticsPage() {
   const { data, isLoading, isError } = useAnalytics();
